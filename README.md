@@ -1,4 +1,4 @@
-# jasmine-react-diff
+# jasmine-react-diff ![build-status](https://snap-ci.com/rogeriochaves/jasmine-react-diff/branch/master/build_image.svg)
 
 Outputs nicely formated jsx when diffing two react components on jasmine, instead of ugly big impossible-to-compare objects.
 
