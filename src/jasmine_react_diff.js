@@ -1,16 +1,12 @@
-var React = require('react/addons');
-var Decompiler = require('react-decompiler');
+import React from 'react/addons';
+import {formatted as reactFormatter} from 'react-decompiler';
 
-module.exports.install = function (jasmine) {
-  function patchPrettyPrinter (originalPrettyPrinter) {
-    jasmine.pp = function (value) {
-      if (React.addons.TestUtils.isElement(value)) {
-        return Decompiler.formatted(value);
-      }
+const isReact = React.addons.TestUtils.isElement;
 
-      return originalPrettyPrinter.apply(this, arguments);
-    }
-  }
+const formatReactComponents = (defaultFormatter) => (value) =>
+  isReact(value) ? reactFormatter(value) : defaultFormatter(value);
 
-  patchPrettyPrinter(jasmine.pp);
-};
+const patchJasmine = (jasmine) =>
+  jasmine.pp = formatReactComponents(jasmine.pp);
+
+export const install = patchJasmine;

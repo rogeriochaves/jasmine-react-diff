@@ -1,33 +1,47 @@
-var React = require('react/addons');
-var reactDiff = require('jasmine_react_diff');
+import React from 'react/addons';
+import {install as reactDiffInstall} from 'jasmine_react_diff';
 
-describe('Jasmine React Diff', function() {
-  beforeEach(function () {
-    reactDiff.install(jasmine);
-  });
+describe('Jasmine React Diff', () => {
+  beforeEach(() => reactDiffInstall(jasmine));
 
-  describe('jasmine pretty printer', function () {
-    it('prints a nicely formated react component', function () {
-      var component = React.createElement("div", null, React.createElement("h1", null, "Foo"), React.createElement("hr", { someProp: "bar" }) );
+  describe('jasmine pretty printer', () => {
+    it('prints a nicely formated react component', () => {
+      let component = (
+        <div>
+          <h1>Foo</h1>
+          <hr someProp="bar" />
+        </div>
+      );
 
-      expect(jasmine.pp(component)).toBe('<div>\n\
-  <h1>Foo</h1>\n\
-  <hr someProp="bar" />\n\
-</div>');
+      expect(jasmine.pp(component)).toBe(`<div>
+  <h1>Foo</h1>
+  <hr someProp="bar" />
+</div>`);
     });
 
-    it('keeps default behaviour for other values', function () {
-      var javascriptObject = {a: 5, b: function () {}};
+    it('keeps default behaviour for other values', () => {
+      let javascriptObject = {a: 5, b: () => {}};
 
       expect(jasmine.pp(javascriptObject)).toBe('Object({ a: 5, b: Function })');
     });
   });
 
   // Example spec just to see jasmine output on failing comparisson
-  xit('fails with different react components', function () {
-    var componentUno = React.createElement("div", null, React.createElement("h1", null, "Foo"), React.createElement("hr", { someProp: "bar" }) );
-    var componentDuo = React.createElement("div", { className: "something" }, React.createElement("h1", null, "Hello World"), React.createElement("hr", null) );
+  xit('fails with different react components', () => {
+    let myComponent = (
+      <div>
+        <h1>Foo</h1>
+        <hr someProp="bar" />
+      </div>
+    );
 
-    expect(componentUno).toEqual(componentDuo);
+    let expectedComponent = (
+      <div className="title">
+        <h1>Hello World</h1>
+        <hr />
+      </div>
+    );
+
+    expect(myComponent).toEqual(expectedComponent);
   });
 });
