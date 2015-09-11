@@ -4,7 +4,7 @@ import {formatted as reactFormatter} from 'react-decompiler';
 const isReact = React.addons.TestUtils.isElement;
 
 const formatReactComponents = (defaultFormatter) => (value) =>
-  isReact(value) ? reactFormatter(value) : defaultFormatter(value);
+  isReact(value) ? `\n${reactFormatter(value)}\n` : defaultFormatter(value);
 
 const patchJasmine = (jasmine) =>
   jasmine.pp = formatReactComponents(jasmine.pp);

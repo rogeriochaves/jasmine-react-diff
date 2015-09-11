@@ -1,8 +1,8 @@
 import React from 'react/addons';
-import jasmineReactDiff from 'jasmine_react_diff';
+import reactDiff from 'jasmine_react_diff';
 
 describe('Jasmine React Diff', () => {
-  beforeEach(() => jasmineReactDiff.install(jasmine));
+  beforeEach(() => reactDiff.install(jasmine));
 
   describe('jasmine pretty printer', () => {
     it('prints a nicely formated react component', () => {
@@ -13,10 +13,12 @@ describe('Jasmine React Diff', () => {
         </div>
       );
 
-      expect(jasmine.pp(component)).toBe(`<div>
+      expect(jasmine.pp(component)).toBe(`
+<div>
   <h1>Foo</h1>
   <hr someProp="bar" />
-</div>`);
+</div>
+`);
     });
 
     it('keeps default behaviour for other values', () => {
