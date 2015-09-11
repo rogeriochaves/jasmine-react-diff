@@ -10,3 +10,4 @@ const patchJasmine = (jasmine) =>
   jasmine.pp = formatReactComponents(jasmine.pp);
 
 export const install = patchJasmine;
+export default {install: patchJasmine};

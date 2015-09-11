@@ -1,8 +1,8 @@
 import React from 'react/addons';
-import {install as reactDiffInstall} from 'jasmine_react_diff';
+import jasmineReactDiff from 'jasmine_react_diff';
 
 describe('Jasmine React Diff', () => {
-  beforeEach(() => reactDiffInstall(jasmine));
+  beforeEach(() => jasmineReactDiff.install(jasmine));
 
   describe('jasmine pretty printer', () => {
     it('prints a nicely formated react component', () => {
@@ -30,15 +30,15 @@ describe('Jasmine React Diff', () => {
   xit('fails with different react components', () => {
     let myComponent = (
       <div>
-        <h1>Foo</h1>
-        <hr someProp="bar" />
+        <h1>Hello World</h1>
+        <hr className="foo" />
       </div>
     );
 
     let expectedComponent = (
-      <div className="title">
-        <h1>Hello World</h1>
-        <hr />
+      <div>
+        <h1>Foo</h1>
+        <hr someProp="bar" />
       </div>
     );
 
