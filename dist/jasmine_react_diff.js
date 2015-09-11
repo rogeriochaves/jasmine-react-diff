@@ -16,7 +16,7 @@ var isReact = _reactAddons2['default'].addons.TestUtils.isElement;
 
 var formatReactComponents = function formatReactComponents(defaultFormatter) {
   return function (value) {
-    return isReact(value) ? (0, _reactDecompiler.formatted)(value) : defaultFormatter(value);
+    return isReact(value) ? '\n' + (0, _reactDecompiler.formatted)(value) + '\n' : defaultFormatter(value);
   };
 };
 
@@ -26,3 +26,4 @@ var patchJasmine = function patchJasmine(jasmine) {
 
 var install = patchJasmine;
 exports.install = install;
+exports['default'] = { install: patchJasmine };
