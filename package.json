@@ -1,6 +1,6 @@
 {
   "name": "jasmine-react-diff",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Outputs nicely formated jsx when diffing two react components",
   "repository": {
     "type": "git",
@@ -9,7 +9,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/karma/bin/karma start karma.conf.js",
-    "prepublish": "mkdir dist; node_modules/babel/bin/babel.js src/jasmine_react_diff.js --out-file dist/jasmine_react_diff.js"
+    "prepublish": "mkdir dist; node_modules/babel/bin/babel.js src/jasmine_react_diff.js --out-file dist/jasmine_react_diff.js",
+    "browserify": "npm run prepublish && browserify . -x react/addons --s jasmine-react-diff | sed \"s/require('react\\/addons')/window['React']/g\" > browserified.js"
   },
   "author": {
     "name": "Rogério Chaves",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "babel": "^5.8.23",
     "babelify": "^6.3.0",
+    "browserify": "^11.1.0",
     "jasmine-core": "^2.3.4",
     "karma": "^0.13.9",
     "karma-babel-preprocessor": "^5.2.2",
@@ -26,10 +28,13 @@
     "karma-jasmine": "*",
     "karma-phantomjs-launcher": "*",
     "phantomjs": "^1.9.18",
-    "phantomjs-polyfill": "0.0.1"
+    "phantomjs-polyfill": "0.0.1",
+    "react": "^0.13.3"
   },
   "dependencies": {
-    "react": "^0.13.3",
-    "react-decompiler": "0.0.2"
+    "react-decompiler": "latest"
+  },
+  "peerDependencies": {
+    "react": "^0.13.3"
   }
 }
