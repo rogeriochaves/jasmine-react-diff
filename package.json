@@ -1,6 +1,6 @@
 {
   "name": "jasmine-react-diff",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Outputs nicely formated jsx when diffing two react components",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "node_modules/karma/bin/karma start karma.conf.js",
     "prepublish": "mkdir dist; node_modules/babel/bin/babel.js src/jasmine_react_diff.js --out-file dist/jasmine_react_diff.js",
-    "browserify": "npm run prepublish && browserify . -x react/addons --s jasmine-react-diff | sed \"s/require('react\\/addons')/window['React']/g\" > browserified.js"
+    "browserify": "npm run prepublish && browserify . --s jasmine-react-diff > browserified.js"
   },
   "author": {
     "name": "Rogério Chaves",
@@ -29,12 +29,10 @@
     "karma-phantomjs-launcher": "*",
     "phantomjs": "^1.9.18",
     "phantomjs-polyfill": "0.0.1",
-    "react": "^0.13.3"
+    "react": "^0.14.1"
   },
   "dependencies": {
+    "react-addons-test-utils": "^0.14.1",
     "react-decompiler": "latest"
-  },
-  "peerDependencies": {
-    "react": "^0.13.3"
   }
 }

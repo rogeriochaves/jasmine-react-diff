@@ -4,19 +4,13 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _reactAddons = require('react/addons');
-
-var _reactAddons2 = _interopRequireDefault(_reactAddons);
+var _reactAddonsTestUtils = require('react-addons-test-utils');
 
 var _reactDecompiler = require('react-decompiler');
 
-var isReact = _reactAddons2['default'].addons.TestUtils.isElement;
-
 var formatReactComponents = function formatReactComponents(defaultFormatter) {
   return function (value) {
-    return isReact(value) ? '\n' + (0, _reactDecompiler.formatted)(value) + '\n' : defaultFormatter(value);
+    return (0, _reactAddonsTestUtils.isElement)(value) ? '\n' + (0, _reactDecompiler.formatted)(value) + '\n' : defaultFormatter(value);
   };
 };
 

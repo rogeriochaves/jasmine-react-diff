@@ -1,4 +1,4 @@
-import React from 'react/addons';
+import React from 'react';
 import reactDiff from 'jasmine_react_diff';
 
 describe('Jasmine React Diff', () => {
