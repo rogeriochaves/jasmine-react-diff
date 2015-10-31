@@ -9,14 +9,14 @@ describe('Jasmine React Diff', () => {
       let component = (
         <div>
           <h1>Foo</h1>
-          <hr someProp="bar" />
+          <hr key="foo" someProp="bar" />
         </div>
       );
 
       expect(jasmine.pp(component)).toBe(`
 <div>
   <h1>Foo</h1>
-  <hr someProp="bar" />
+  <hr key="foo" someProp="bar" />
 </div>
 `);
     });
