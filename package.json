@@ -1,6 +1,6 @@
 {
   "name": "jasmine-react-diff",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Outputs nicely formated jsx when diffing two react components",
   "repository": {
     "type": "git",
