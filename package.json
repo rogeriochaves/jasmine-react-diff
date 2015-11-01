@@ -1,6 +1,6 @@
 {
   "name": "jasmine-react-diff",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Outputs nicely formated jsx when diffing two react components",
   "repository": {
     "type": "git",
@@ -9,8 +9,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/karma/bin/karma start karma.conf.js",
-    "prepublish": "mkdir dist; node_modules/babel/bin/babel.js src/jasmine_react_diff.js --out-file dist/jasmine_react_diff.js",
-    "browserify": "npm run prepublish && browserify . --s jasmine-react-diff > browserified.js"
+    "prepublish": "mkdir dist; node_modules/babel/bin/babel.js src/jasmine_react_diff.js --out-file dist/jasmine_react_diff.js; npm run browserify",
+    "browserify": "browserify . --s jasmine-react-diff > dist/browserified.js"
   },
   "author": {
     "name": "Rogério Chaves",
