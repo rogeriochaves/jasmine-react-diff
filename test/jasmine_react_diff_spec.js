@@ -41,11 +41,15 @@ describe('Jasmine React Diff', () => {
     });
 
     it('prints an object of react components', () => {
-      let component = {foo: <div />, bar: <span />};
+      let component = {foo: <div />, bar: <span />, qux: {foo: <div />, bar: <span />}};
 
       expect(jasmine.pp(component)).toBe(`{
   foo: <div />,
-  bar: <span />
+  bar: <span />,
+  qux: {
+    foo: <div />,
+    bar: <span />
+  }
 }`);
     });
 
@@ -66,10 +70,10 @@ describe('Jasmine React Diff', () => {
   bar: <span />,
   circularObject: [Circular],
   circularArray: [
-  1,
-  <div />,
-  [Circular]
-]
+    1,
+    <div />,
+    [Circular]
+  ]
 }`);
     });
   });

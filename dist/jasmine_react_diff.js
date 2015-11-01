@@ -9,9 +9,19 @@ var _reactAddonsTestUtils = require('react-addons-test-utils');
 var _reactDecompiler = require('react-decompiler');
 
 var formatReactComponents = function formatReactComponents(defaultFormatter, jumpingLine) {
+  var seen = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
   return function (value) {
+    if (seen.indexOf(value) > -1) {
+      return '[Circular]';
+    }
+    seen.push(value);
+
     if (Array.isArray(value) && value.some(_reactAddonsTestUtils.isElement)) {
-      return formatReactArray(defaultFormatter)(value);
+      return formatReactArray(defaultFormatter, seen)(value);
+    }
+
+    if (typeof value === 'object' && !Array.isArray(value) && value !== null && hasAnyReactValues(value)) {
+      return formatReactObject(defaultFormatter, seen)(value);
     }
 
     if ((0, _reactAddonsTestUtils.isElement)(value)) {
@@ -22,9 +32,27 @@ var formatReactComponents = function formatReactComponents(defaultFormatter, jum
   };
 };
 
-var formatReactArray = function formatReactArray(defaultFormatter) {
+var formatReactArray = function formatReactArray(defaultFormatter, seen) {
   return function (array) {
-    return '[\n  ' + array.map(formatReactComponents(defaultFormatter, false)).join(',\n  ') + '\n]';
+    return '[\n  ' + array.map(formatReactComponents(defaultFormatter, false, seen)).join(',\n  ') + '\n]';
+  };
+};
+
+var hasAnyReactValues = function hasAnyReactValues(object) {
+  for (var key in object) {
+    if ((0, _reactAddonsTestUtils.isElement)(object[key])) return true;
+  }
+  return false;
+};
+
+var formatReactObject = function formatReactObject(defaultFormatter, seen) {
+  return function (object) {
+    var formatedItems = [];
+
+    for (var key in object) {
+      formatedItems.push(key + ': ' + formatReactComponents(defaultFormatter, false, seen)(object[key]));
+    }
+    return '{\n  ' + formatedItems.join(',\n  ') + '\n}';
   };
 };
 
