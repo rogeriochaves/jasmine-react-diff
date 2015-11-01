@@ -40,10 +40,37 @@ describe('Jasmine React Diff', () => {
 ]`);
     });
 
+    it('prints an object of react components', () => {
+      let component = {foo: <div />, bar: <span />};
+
+      expect(jasmine.pp(component)).toBe(`{
+  foo: <div />,
+  bar: <span />
+}`);
+    });
+
     it('keeps default behaviour for other values', () => {
       let javascriptObject = {a: 5, b: () => {}};
 
       expect(jasmine.pp(javascriptObject)).toBe('Object({ a: 5, b: Function })');
+    });
+
+    it('does not break with circular references', () => {
+      let component = {foo: <div />, bar: <span />};
+      component.circularObject = component;
+      component.circularArray = [1, <div />];
+      component.circularArray.push(component.circularArray);
+
+      expect(jasmine.pp(component)).toBe(`{
+  foo: <div />,
+  bar: <span />,
+  circularObject: [Circular],
+  circularArray: [
+  1,
+  <div />,
+  [Circular]
+]
+}`);
     });
   });
 
