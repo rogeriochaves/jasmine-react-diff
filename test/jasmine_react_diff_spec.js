@@ -21,6 +21,25 @@ describe('Jasmine React Diff', () => {
 `);
     });
 
+    it('prints an array of react components', () => {
+      let component = [<div />, <span />];
+
+      expect(jasmine.pp(component)).toBe(`[
+  <div />,
+  <span />
+]`);
+    });
+
+    it('prints an array of mixed react components and normal values', () => {
+      let component = [<div />, <span />, [1, 2, 3]];
+
+      expect(jasmine.pp(component)).toBe(`[
+  <div />,
+  <span />,
+  [ 1, 2, 3 ]
+]`);
+    });
+
     it('keeps default behaviour for other values', () => {
       let javascriptObject = {a: 5, b: () => {}};
 
