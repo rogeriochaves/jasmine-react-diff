@@ -23,6 +23,8 @@ import reactDiff from 'jasmine-react-diff';
 reactDiff.install(jasmine);
 ```
 
+If you prefer, there is also a browserified version at `dist/browserified.js` that exports the `jasmineReactDiff` global.
+
 # How it looks
 
 For a spec like this:
