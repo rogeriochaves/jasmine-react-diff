@@ -8,9 +8,20 @@ var _reactAddonsTestUtils = require('react-addons-test-utils');
 
 var _reactDecompiler = require('react-decompiler');
 
-var formatReactComponents = function formatReactComponents(defaultFormatter, jumpingLine) {
+var formatReactComponentsWithFallback = function formatReactComponentsWithFallback(defaultFormatter, jumpingLine) {
   var seen = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
   var deepness = arguments.length <= 3 || arguments[3] === undefined ? 1 : arguments[3];
+  return function (value) {
+    try {
+      return formatReactComponents(defaultFormatter, jumpingLine, seen, deepness)(value);
+    } catch (ex) {
+      console.warn('jasmineReactDiff: Exception while trying to format react components: ' + ex + '. Falling back to jasmine default formatter.');
+      return defaultFormatter(value);
+    }
+  };
+};
+
+var formatReactComponents = function formatReactComponents(defaultFormatter, jumpingLine, seen, deepness) {
   return function (value) {
     if (seen.indexOf(value) > -1) {
       return '[Circular]';
@@ -34,7 +45,7 @@ var formatReactComponents = function formatReactComponents(defaultFormatter, jum
 
 var formatReactArray = function formatReactArray(defaultFormatter, seen, deepness) {
   return function (array) {
-    return '[\n' + indentation(deepness) + array.map(formatReactComponents(defaultFormatter, false, seen, deepness + 1)).join(',\n' + indentation(deepness)) + '\n' + indentation(deepness - 1) + ']';
+    return '[\n' + indentation(deepness) + array.map(formatReactComponentsWithFallback(defaultFormatter, false, seen, deepness + 1)).join(',\n' + indentation(deepness)) + '\n' + indentation(deepness - 1) + ']';
   };
 };
 
@@ -50,7 +61,7 @@ var formatReactObject = function formatReactObject(defaultFormatter, seen, deepn
     var formatedItems = [];
 
     for (var key in object) {
-      formatedItems.push(key + ': ' + formatReactComponents(defaultFormatter, false, seen, deepness + 1)(object[key]));
+      formatedItems.push(key + ': ' + formatReactComponentsWithFallback(defaultFormatter, false, seen, deepness + 1)(object[key]));
     }
     return '{\n' + indentation(deepness) + formatedItems.join(',\n' + indentation(deepness)) + '\n' + indentation(deepness - 1) + '}';
   };
@@ -66,7 +77,7 @@ var formatReactValue = function formatReactValue(value) {
 };
 
 var patchJasmine = function patchJasmine(jasmine) {
-  return jasmine.pp = formatReactComponents(jasmine.pp);
+  return jasmine.pp = formatReactComponentsWithFallback(jasmine.pp);
 };
 
 var install = patchJasmine;

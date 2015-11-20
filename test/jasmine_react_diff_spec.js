@@ -2,7 +2,7 @@ import React from 'react';
 import reactDiff from 'jasmine_react_diff';
 
 describe('Jasmine React Diff', () => {
-  beforeEach(() => reactDiff.install(jasmine));
+  beforeAll(() => reactDiff.install(jasmine));
 
   describe('jasmine pretty printer', () => {
     it('prints a nicely formated react component', () => {
@@ -75,6 +75,15 @@ describe('Jasmine React Diff', () => {
     [Circular]
   ]
 }`);
+    });
+
+    it('falls back to the default formatter if any errors', () => {
+      let javascriptObject = [4, 5, 6];
+      spyOn(javascriptObject, 'some').and.callFake(() => {
+        throw 'some error';
+      });
+
+      expect(jasmine.pp(javascriptObject)).toBe('[ 4, 5, 6, some: spy on some ]');
     });
   });
 

@@ -1,7 +1,16 @@
 import {isElement as isReact} from 'react-addons-test-utils';
 import {formatted as reactFormatter} from 'react-decompiler';
 
-const formatReactComponents = (defaultFormatter, jumpingLine, seen = [], deepness = 1) => (value) => {
+const formatReactComponentsWithFallback = (defaultFormatter, jumpingLine, seen = [], deepness = 1) => (value) => {
+  try {
+    return formatReactComponents(defaultFormatter, jumpingLine, seen, deepness)(value);
+  } catch (ex) {
+    console.warn(`jasmineReactDiff: Exception while trying to format react components: ${ex}. Falling back to jasmine default formatter.`)
+    return defaultFormatter(value);
+  }
+};
+
+const formatReactComponents = (defaultFormatter, jumpingLine, seen, deepness) => (value) => {
   if (seen.indexOf(value) > -1) {
     return '[Circular]';
   }
@@ -23,7 +32,7 @@ const formatReactComponents = (defaultFormatter, jumpingLine, seen = [], deepnes
 
 const formatReactArray = (defaultFormatter, seen, deepness) => (array) =>
   `[
-${indentation(deepness)}${array.map(formatReactComponents(defaultFormatter, false, seen, deepness + 1)).join(`,\n${indentation(deepness)}`)}
+${indentation(deepness)}${array.map(formatReactComponentsWithFallback(defaultFormatter, false, seen, deepness + 1)).join(`,\n${indentation(deepness)}`)}
 ${indentation(deepness - 1)}]`;
 
 const hasAnyReactValues = (object) => {
@@ -37,7 +46,7 @@ const formatReactObject = (defaultFormatter, seen, deepness) => (object) => {
   let formatedItems = [];
 
   for (let key in object) {
-    formatedItems.push(`${key}: ${formatReactComponents(defaultFormatter, false, seen, deepness + 1)(object[key])}`);
+    formatedItems.push(`${key}: ${formatReactComponentsWithFallback(defaultFormatter, false, seen, deepness + 1)(object[key])}`);
   }
   return `{
 ${indentation(deepness)}${formatedItems.join(`,\n${indentation(deepness)}`)}
@@ -51,7 +60,7 @@ const formatReactValue = (value, jumpingLine = true) =>
   jumpingLine ? `\n${reactFormatter(value)}\n` : reactFormatter(value);
 
 const patchJasmine = (jasmine) =>
-  jasmine.pp = formatReactComponents(jasmine.pp);
+  jasmine.pp = formatReactComponentsWithFallback(jasmine.pp);
 
 export const install = patchJasmine;
 export default {install: patchJasmine};
